@@ -12,6 +12,7 @@ export default function Sidebar() {
     { href: '/dashboard', label: 'Home' },
     { href: '/dashboard/meal-plan', label: 'Meal Plan' },
     { href: '/dashboard/progress', label: 'Progress' },
+      { href: '/dashboard/ai-coach', label: 'AI Coach' },  
   ];
 
   return (

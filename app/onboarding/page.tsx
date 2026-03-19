@@ -10,6 +10,8 @@ export default function OnboardingPage() {
 
   const handleComplete = async (formData: Partial<OnboardingData>) => {
     try {
+              localStorage.setItem('pulseai_survey', JSON.stringify(formData));
+
       const response = await fetch('http://127.0.0.1:8000/generate-plan', {
         method: 'POST',
         headers: {
