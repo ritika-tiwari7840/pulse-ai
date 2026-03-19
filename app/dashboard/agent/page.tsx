@@ -2,75 +2,48 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDashboard } from '@/context/DashboardContext';
-import { useAgent } from '@/context/AgentContext';
 import AgentChatScreen from '@/components/agent/AgentChatScreen';
-import StreakEarnedModal from '@/components/agent/StreakEarnedModal';
-import ResumeModal from '@/components/agent/ResumeModal';
 
 export default function AgentPage() {
   const router = useRouter();
-  const { currentDay, updateLevel } = useDashboard();
-  const { elapsedTime, setStreakEarned, streakEarned, clearMessages } = useAgent();
-  const [showStreakModal, setShowStreakModal] = useState(false);
-  const [showResumeModal, setShowResumeModal] = useState(false);
+
+  const [todayPlan, setTodayPlan] = useState<any>(null);
+  const [planName, setPlanName] = useState("");
 
   useEffect(() => {
-    if (!currentDay) {
+    const selectedDate = localStorage.getItem('selected_date');
+    const today = new Date().toLocaleDateString('en-CA');
+
+    if (!selectedDate || selectedDate !== today) {
       router.push('/dashboard');
-    } else {
-      // Start fresh chat for this day
-      clearMessages();
+      return;
     }
-  }, [currentDay]);
 
-  // Show streak modal when earned
-  useEffect(() => {
-    if (streakEarned) {
-      setShowStreakModal(true);
-    }
-  }, [streakEarned]);
+    const savedPlan = localStorage.getItem('pulseai_plan');
 
-  const handleExit = () => {
-    const TARGET_SECONDS = 10 * 60;
-    if (elapsedTime < TARGET_SECONDS) {
-      setShowResumeModal(true);
-    } else {
-      completeDay();
-    }
-  };
+    if (!savedPlan) return;
 
-  const completeDay = () => {
-    const TARGET_SECONDS = 10 * 60;
-    if (currentDay && elapsedTime >= TARGET_SECONDS) {
-      updateLevel(currentDay, {
-        completed: true,
-        streakCount: 1,
-        lastCompletedDate: new Date().toISOString(),
-      });
-    }
-    router.push('/dashboard');
-  };
+    const parsed = JSON.parse(savedPlan);
 
-  const handleResumeNo = () => {
-    setShowResumeModal(false);
-    router.push('/dashboard');
-  };
+    setPlanName(parsed?.workout_plan?.plan_name);
 
-  const handleStreakModalClose = () => {
-    setShowStreakModal(false);
-    completeDay();
-  };
+    const dayName = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+    });
+
+    const found = parsed?.workout_plan?.weekly_schedule?.find(
+      (d: any) =>
+        d.day.toLowerCase() === dayName.toLowerCase()
+    );
+
+    setTodayPlan(found);
+  }, []);
 
   return (
-    <>
-      <AgentChatScreen onExit={handleExit} />
-      {showStreakModal && (
-        <StreakEarnedModal onClose={handleStreakModalClose} />
-      )}
-      {showResumeModal && (
-        <ResumeModal onResume={() => setShowResumeModal(false)} onExit={handleResumeNo} />
-      )}
-    </>
+    <AgentChatScreen
+      onExit={() => router.push('/dashboard')}
+      todayPlan={todayPlan}
+      planName={planName}
+    />
   );
 }

@@ -10,7 +10,6 @@ export default function OnboardingPage() {
 
   const handleComplete = async (formData: Partial<OnboardingData>) => {
     try {
-      // Submit to backend API
       const response = await fetch('http://127.0.0.1:8000/generate-plan', {
         method: 'POST',
         headers: {
@@ -18,13 +17,18 @@ export default function OnboardingPage() {
         },
         body: JSON.stringify(formData),
       });
-      console.log(formData);
-      if (response.ok) {
-        // Mark onboarding as complete
-const data = await response.json();
 
-console.log("Backend JSON:", data);     
-   localStorage.setItem('pulseai_onboarding_complete', 'true');
+      if (response.ok) {
+        const result = await response.json();
+
+        console.log("Backend JSON:", result);
+
+        // ✅ SAVE PLAN
+        localStorage.setItem('pulseai_plan', JSON.stringify(result.response));
+
+        // ✅ mark onboarding done
+        localStorage.setItem('pulseai_onboarding_complete', 'true');
+
         router.push('/dashboard');
       } else {
         console.error('Failed to submit onboarding data');
