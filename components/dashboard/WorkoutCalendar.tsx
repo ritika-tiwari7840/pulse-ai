@@ -11,13 +11,9 @@ export default function WorkoutCalendar({ onSelectDate }: Props) {
   const [streak, setStreak] = useState(0);
   const [totalWorkouts, setTotalWorkouts] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    setIsMounted(true);
-    // ✅ FIX: use local date instead of UTC
-    const localTodayStr = new Date().toLocaleDateString('en-CA');
-    setToday(localTodayStr);
-
+  const calculateStreak = () => {
     // Calculate Real Streak
     const todayDate = new Date();
     let computedStreak = 0;
@@ -43,6 +39,19 @@ export default function WorkoutCalendar({ onSelectDate }: Props) {
     }
     setStreak(computedStreak);
     setTotalWorkouts(computedTotal);
+    setRefreshKey(prev => prev + 1);
+  };
+
+  useEffect(() => {
+    setIsMounted(true);
+    // ✅ FIX: use local date instead of UTC
+    const localTodayStr = new Date().toLocaleDateString('en-CA');
+    setToday(localTodayStr);
+
+    calculateStreak();
+
+    window.addEventListener('dashboard_streak_update', calculateStreak);
+    return () => window.removeEventListener('dashboard_streak_update', calculateStreak);
   }, []);
 
   const getDates = () => {

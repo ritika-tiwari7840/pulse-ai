@@ -84,6 +84,13 @@ export default function DashboardPage() {
       if (todayPlan?.exercises && updated.length === todayPlan.exercises.length) {
         localStorage.setItem(`completed_${localTodayDate}`, 'true');
         toast.success("All exercises completed! Day marked as done! 🔥");
+        window.dispatchEvent(new Event('dashboard_streak_update'));
+      } else {
+        const wasCompleted = localStorage.getItem(`completed_${localTodayDate}`);
+        if (wasCompleted) {
+          localStorage.removeItem(`completed_${localTodayDate}`);
+          window.dispatchEvent(new Event('dashboard_streak_update'));
+        }
       }
 
       return updated;

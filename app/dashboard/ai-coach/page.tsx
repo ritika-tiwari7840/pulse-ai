@@ -128,20 +128,41 @@ export default function DashboardPage() {
           <div className="mt-10 border-t pt-6">
             <h2 className="text-xl font-bold mb-4">AI Coach 🎥</h2>
 
-            {/* Upload */}
-            <input
-              type="file"
-              accept="video/*"
-              onChange={(e) => setVideo(e.target.files?.[0] || null)}
-              className="mb-3"
-            />
+            {/* Upload Area */}
+            <div className="border-2 border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 transition-colors rounded-2xl p-8 mb-6 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden group">
+              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span className="text-3xl text-primary">📤</span>
+              </div>
+              <h3 className="font-bold text-lg mb-2 text-foreground">Upload Workout Video</h3>
+              <p className="text-muted-foreground text-sm mb-6 max-w-sm">
+                Select a video of your exercise to receive instant AI feedback on your form and technique.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => setVideo(e.target.files?.[0] || null)}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    title="Select Video"
+                  />
+                  <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-2.5 rounded-lg shadow-sm transition-colors cursor-pointer w-full sm:w-auto">
+                    {video ? <span className="truncate max-w-[200px] inline-block align-bottom">{video.name}</span> : 'Select Video'}
+                  </button>
+                </div>
 
-            <button
-              onClick={handleUpload}
-              className="bg-primary text-white px-4 py-2 rounded"
-            >
-              {loading ? 'Analyzing...' : 'Upload & Analyze'}
-            </button>
+                {video && (
+                  <button
+                    onClick={handleUpload}
+                    disabled={loading}
+                    className="bg-accent text-accent-foreground font-bold px-6 py-2.5 rounded-lg shadow-md hover:bg-accent/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto z-20 relative"
+                  >
+                    {loading ? 'Analyzing...' : 'Analyze Form 🔥'}
+                  </button>
+                )}
+              </div>
+            </div>
 
             {/* RESULT */}
             {result?.feedback && (

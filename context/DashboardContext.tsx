@@ -50,10 +50,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
-          const { levels: savedLevels, currentStreak: cs, bestStreak: bs } = JSON.parse(saved);
+          const { levels: savedLevels, bestStreak: bs } = JSON.parse(saved);
           setLevels(savedLevels);
-          setCurrentStreak(cs);
-          setBestStreak(bs);
+          setBestStreak(bs || 0);
         } catch (e) {
           console.error('Failed to load dashboard state:', e);
           setLevels(initializeLevels());
@@ -61,6 +60,26 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       } else {
         setLevels(initializeLevels());
       }
+      
+      // Calculate real streak from completed workouts instead of using saved placeholder value
+      const todayDate = new Date();
+      let computedStreak = 0;
+      for (let i = 0; i < 30; i++) {
+         const d = new Date(todayDate);
+         d.setDate(d.getDate() - i);
+         const dateStr = d.toLocaleDateString('en-CA');
+         const isComp = localStorage.getItem(`completed_${dateStr}`) === 'true';
+         
+         if (i === 0 && !isComp) continue;
+         
+         if (isComp) {
+           computedStreak++;
+         } else {
+           break;
+         }
+      }
+      setCurrentStreak(computedStreak);
+
       setIsLoaded(true);
     }
   };
@@ -80,6 +99,15 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadDashboardState();
+    
+    const handleStreakUpdate = () => {
+      loadDashboardState();
+    };
+    window.addEventListener('dashboard_streak_update', handleStreakUpdate);
+    
+    return () => {
+      window.removeEventListener('dashboard_streak_update', handleStreakUpdate);
+    };
   }, []);
 
   useEffect(() => {
