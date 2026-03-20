@@ -46,49 +46,68 @@ export default function AgentChatScreen({
   };
 
   return (
-    <div className="flex flex-col h-screen">
-
+    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
       {/* HEADER */}
-      <div className="p-4 border-b">
-        <h1 className="font-bold">PulseAI</h1>
+      <div className="p-4 border-b flex justify-between items-center bg-card z-10">
+        <h1 className="font-bold text-xl text-primary">PulseAI</h1>
         <TimerDisplay minutes={minutes} seconds={seconds} hasEarned={false} />
       </div>
 
-      {/* WORKOUT */}
-      <div className="p-4">
-        {!todayPlan ? (
-          <p>Loading...</p>
-        ) : todayPlan?.exercises?.length === 0 ? (
-          <p>Rest Day 😌</p>
-        ) : (
-          <>
-            <h2 className="font-bold">{planName}</h2>
-            <p>{todayPlan.focus}</p>
-
-            {todayPlan.exercises.map((ex: any, i: number) => (
-              <div key={i} className="border p-2 my-2 rounded">
-                <p>{ex.name}</p>
-                <p>{ex.sets} x {ex.reps}</p>
+      <div className="flex flex-1 flex-col md:flex-row overflow-hidden">
+        {/* WORKOUT PANEL - Scrollable independently */}
+        <div className="w-full md:w-80 lg:w-96 max-h-[35vh] md:max-h-none border-b md:border-b-0 md:border-r overflow-y-auto flex-shrink-0 bg-muted/10">
+          <div className="p-4 space-y-4">
+            {!todayPlan ? (
+              <p className="text-muted-foreground animate-pulse">Loading plan...</p>
+            ) : todayPlan?.exercises?.length === 0 ? (
+              <div className="text-center py-10 bg-card rounded-lg border">
+                <p className="text-3xl mb-2">😌</p>
+                <p className="font-medium">Rest Day</p>
               </div>
+            ) : (
+              <>
+                <div>
+                  <h2 className="font-bold text-lg">{planName}</h2>
+                  <p className="text-sm text-primary">{todayPlan.focus}</p>
+                </div>
+
+                <div className="space-y-2">
+                  {todayPlan.exercises.map((ex: any, i: number) => (
+                    <div key={i} className="border bg-card p-3 rounded-md shadow-sm">
+                      <p className="font-semibold text-sm">{ex.name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {ex.sets} sets × {ex.reps} reps
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <Button onClick={markComplete} className="w-full mt-4">
+                  Mark Complete
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* CHAT PANEL - Takes remaining space */}
+        <div className="flex-1 flex flex-col min-w-0 bg-background relative">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((msg) => (
+              <ChatMessage key={msg.id} message={msg} />
             ))}
+            <div ref={messagesEndRef} />
+          </div>
 
-            <Button onClick={markComplete}>Mark Complete</Button>
-          </>
-        )}
-      </div>
-
-      {/* CHAT */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {messages.map((msg) => (
-          <ChatMessage key={msg.id} message={msg} />
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* INPUT */}
-      <div className="p-4 border-t">
-        <ChatInput value={input} onChange={setInput} onSend={sendMessage} />
-        <Button onClick={onExit}>Exit</Button>
+          <div className="p-4 border-t bg-card">
+            <ChatInput value={input} onChange={setInput} onSend={sendMessage} />
+            <div className="mt-2 flex justify-end">
+              <Button variant="ghost" size="sm" onClick={onExit} className="text-muted-foreground hover:text-foreground">
+                Exit Session
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

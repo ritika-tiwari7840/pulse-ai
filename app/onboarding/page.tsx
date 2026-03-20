@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useOnboarding, OnboardingData } from '@/context/OnboardingContext';
 import OnboardingContainer from '@/components/onboarding/OnboardingContainer';
 
@@ -12,7 +13,8 @@ export default function OnboardingPage() {
     try {
               localStorage.setItem('pulseai_survey', JSON.stringify(formData));
 
-      const response = await fetch('http://127.0.0.1:8000/generate-plan', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const response = await fetch(`${apiUrl}/generate-plan`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,9 +36,11 @@ export default function OnboardingPage() {
         router.push('/dashboard');
       } else {
         console.error('Failed to submit onboarding data');
+        toast.error('Failed to submit onboarding data');
       }
     } catch (error) {
       console.error('Error submitting onboarding:', error);
+      toast.error('Error submitting onboarding');
     }
   };
 

@@ -4,19 +4,34 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AgentChatScreen from '@/components/agent/AgentChatScreen';
 
+type Exercise = {
+  name: string;
+  sets: number;
+  reps: number;
+};
+
+type WorkoutPlan = {
+  day: string;
+  focus: string;
+  exercises: Exercise[];
+};
+
 export default function AgentPage() {
   const router = useRouter();
 
-  const [todayPlan, setTodayPlan] = useState<any>(null);
+  const [todayPlan, setTodayPlan] = useState<WorkoutPlan | null>(null);
   const [planName, setPlanName] = useState("");
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const selectedDate = localStorage.getItem('selected_date');
     const today = new Date().toLocaleDateString('en-CA');
 
     if (!selectedDate || selectedDate !== today) {
-      router.push('/dashboard');
+      router.replace('/dashboard');
       return;
+    } else {
+      setIsReady(true);
     }
 
     const savedPlan = localStorage.getItem('pulseai_plan');
@@ -32,12 +47,14 @@ export default function AgentPage() {
     });
 
     const found = parsed?.workout_plan?.weekly_schedule?.find(
-      (d: any) =>
+      (d: WorkoutPlan) =>
         d.day.toLowerCase() === dayName.toLowerCase()
     );
 
     setTodayPlan(found);
-  }, []);
+  }, [router]);
+
+  if (!isReady) return null;
 
   return (
     <AgentChatScreen

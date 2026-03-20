@@ -2,46 +2,46 @@
 @import 'tw-animate-css';
 
 :root {
-  /* Dark theme - applied globally since html has .dark class */
-  --background: oklch(0.08 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.12 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.6 0.2 270);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.65 0.18 300);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.25 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.72 0.22 35);
-  --accent-foreground: oklch(0.12 0 0);
-  --destructive: oklch(0.58 0.25 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.22 0 0);
-  --input: oklch(0.18 0 0);
-  --ring: oklch(0.6 0.2 270);
-  --chart-1: oklch(0.6 0.2 270);
-  --chart-2: oklch(0.65 0.18 300);
-  --chart-3: oklch(0.72 0.22 35);
-  --chart-4: oklch(0.55 0.18 260);
-  --chart-5: oklch(0.68 0.19 320);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.12 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.6 0.2 270);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.65 0.18 300);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.22 0 0);
-  --sidebar-ring: oklch(0.6 0.2 270);
+  /* Discord Dark Theme */
+  --background: #313338;
+  --foreground: #dbdee1;
+  --card: #2b2d31;
+  --card-foreground: #dbdee1;
+  --popover: #2b2d31;
+  --popover-foreground: #dbdee1;
+  --primary: #5865F2;
+  --primary-foreground: #ffffff;
+  --secondary: #4e5058;
+  --secondary-foreground: #ffffff;
+  --muted: #4e5058;
+  --muted-foreground: #949ba4;
+  --accent: #5865F2;
+  --accent-foreground: #ffffff;
+  --destructive: #da373c;
+  --destructive-foreground: #ffffff;
+  --border: #1e1f22;
+  --input: #1e1f22;
+  --ring: #5865F2;
+  --chart-1: #5865F2;
+  --chart-2: #57F287;
+  --chart-3: #FEE75C;
+  --chart-4: #EB459E;
+  --chart-5: #ED4245;
+  --radius: 0.5rem;
+  --sidebar: #2b2d31;
+  --sidebar-foreground: #dbdee1;
+  --sidebar-primary: #5865F2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #313338;
+  --sidebar-accent-foreground: #dbdee1;
+  --sidebar-border: #1e1f22;
+  --sidebar-ring: #5865F2;
   /* Gamification colors */
-  --streak-gold: oklch(0.72 0.22 35);
-  --streak-fire: oklch(0.58 0.25 25);
-  --level-locked: oklch(0.3 0 0);
-  --level-available: oklch(0.6 0.2 270);
-  --level-completed: oklch(0.65 0.18 300);
+  --streak-gold: #FEE75C;
+  --streak-fire: #ED4245;
+  --level-locked: #1e1f22;
+  --level-available: #5865F2;
+  --level-completed: #57F287;
 }
 
 @theme inline {
