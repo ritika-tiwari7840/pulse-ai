@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useOnboarding, OnboardingData } from '@/context/OnboardingContext';
@@ -8,6 +9,13 @@ import OnboardingContainer from '@/components/onboarding/OnboardingContainer';
 export default function OnboardingPage() {
   const router = useRouter();
   const { data } = useOnboarding();
+
+  useEffect(() => {
+    const token = localStorage.getItem('pulseai_user_token');
+    if (!token) {
+      router.replace('/login');
+    }
+  }, [router]);
 
   const handleComplete = async (formData: Partial<OnboardingData>) => {
     try {
@@ -44,5 +52,10 @@ export default function OnboardingPage() {
     }
   };
 
-  return <OnboardingContainer onComplete={handleComplete} />;
+  const handleSkip = () => {
+    localStorage.setItem('pulseai_onboarding_complete', 'true');
+    router.push('/dashboard');
+  };
+
+  return <OnboardingContainer onComplete={handleComplete} onSkip={handleSkip} />;
 }

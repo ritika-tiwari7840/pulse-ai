@@ -23,7 +23,12 @@ export default function BasicInfoStep({
     onUpdate({ age });
   };
 
-  const isValid = data.name && data.age && data.age > 0;
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const height = parseInt(e.target.value) || 0;
+    onUpdate({ height });
+  };
+
+  const isValid = data.name && data.age && data.age > 0 && data.height && data.height > 0;
 
   return (
     <div className="space-y-6">
@@ -40,17 +45,31 @@ export default function BasicInfoStep({
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          Age
-        </label>
-        <Input
-          type="number"
-          placeholder="Enter your age"
-          value={data.age || ''}
-          onChange={handleAgeChange}
-          className="bg-input border-border text-foreground"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Age
+          </label>
+          <Input
+            type="number"
+            placeholder="Age"
+            value={data.age || ''}
+            onChange={handleAgeChange}
+            className="bg-input border-border text-foreground"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Height (cm)
+          </label>
+          <Input
+            type="number"
+            placeholder="Height"
+            value={data.height || ''}
+            onChange={handleHeightChange}
+            className="bg-input border-border text-foreground"
+          />
+        </div>
       </div>
 
       <p className="text-sm text-muted-foreground">

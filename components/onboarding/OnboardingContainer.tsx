@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 
 interface OnboardingContainerProps {
   onComplete: (data: Partial<OnboardingData>) => void;
+  onSkip?: () => void;
 }
 
 const TOTAL_STEPS = 8;
@@ -30,7 +31,7 @@ const steps = [
   { title: 'Review', component: ReviewStep },
 ];
 
-export default function OnboardingContainer({ onComplete }: OnboardingContainerProps) {
+export default function OnboardingContainer({ onComplete, onSkip }: OnboardingContainerProps) {
   const { step, setStep, data, updateData } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -112,6 +113,17 @@ export default function OnboardingContainer({ onComplete }: OnboardingContainerP
             </Button>
           )}
         </div>
+
+        {onSkip && (
+          <div className="text-center mt-6">
+            <button
+              onClick={onSkip}
+              className="text-sm text-muted-foreground hover:text-primary underline transition-colors"
+            >
+              Skip onboarding for now
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

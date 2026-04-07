@@ -30,6 +30,12 @@ export default function DashboardPage() {
   const [localTodayDate, setLocalTodayDate] = useState("");
 
   useEffect(() => {
+    const token = localStorage.getItem('pulseai_user_token');
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
     const onboarded = localStorage.getItem('pulseai_onboarding_complete');
     if (!onboarded) {
       router.replace('/onboarding');

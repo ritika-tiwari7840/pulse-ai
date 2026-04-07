@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 export interface OnboardingData {
   name: string;
   age: number;
+  height: number;
   fitnessGoals: string[];
   healthConditions: string[];
   weight: number;
